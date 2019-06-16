@@ -1,0 +1,4 @@
+section.game-root
+  h1 Playground Global Room
+
+  .game-area#playground Loading now..

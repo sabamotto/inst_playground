@@ -2,7 +2,7 @@ defmodule InstPlaygroundWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "room:*", InstPlaygroundWeb.RoomChannel
+  channel "playground:*", InstPlaygroundWeb.PlaygroundChannel
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After

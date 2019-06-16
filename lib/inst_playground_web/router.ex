@@ -15,8 +15,13 @@ defmodule InstPlaygroundWeb.Router do
 
   scope "/", InstPlaygroundWeb do
     pipe_through :browser
+    get "/", Redirector, to: "/rooms/playground"
 
-    get "/", PageController, :index
+    scope "/rooms" do
+      get "/", Redirector, to: "/rooms/playground"
+
+      resources "/playground", PlaygroundController, only: [:index]
+    end
   end
 
   # Other scopes may use custom stacks.

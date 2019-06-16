@@ -1,0 +1,29 @@
+doctype html
+html lang="en"
+  head
+    meta charset="utf-8"
+    meta content="IE=edge" http-equiv="X-UA-Compatible"
+    meta content="width=device-width, initial-scale=1.0" name="viewport"
+    meta content="Music instrument playground in online room." name="description"
+    meta content="sabamotto" name="author"
+    title Hello InstPlayground!
+    link rel="stylesheet" href=Routes.static_path(@conn, "/css/app.css")
+
+  body
+    header
+      section.container
+        nav role="navigation"
+          ul.nav.nav-pills.pull-right
+            li
+              a href="http://hexdocs.pm/phoenix/overview.html" Get Started
+        a.phx-logo href="http://phoenixframework.org/"
+          img alt="Phoenix Framework Logo" src=Routes.static_path(@conn, "/images/phoenix.png")
+
+    main.container role="main"
+      section.notices.floating
+        p.alert.alert-info role="alert"= get_flash(@conn, :info)
+        p.alert.alert-danger role="alert"= get_flash(@conn, :error)
+
+      = render @view_module, @view_template, assigns
+
+    script src=Routes.static_path(@conn, "/js/app.js")
