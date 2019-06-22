@@ -1,3 +1,60 @@
 /* This file is for your main application css. */
 
-@import "./phoenix.css";
+@import "./phoenix.css"
+
+html, body
+  overflow: hidden
+  height: 100%
+  margin: 0
+
+body
+  display: grid
+  grid-template-rows: auto 1fr
+
+.floating
+  position: absolute
+  top: 0
+  left: 0
+
+main.container
+  position: relative
+  margin: 0
+  padding: 0
+  max-width: initial
+
+section.game-root
+  width: 100%
+  height: 100%
+
+  .loading
+    position: absolute
+    width: 100%
+    height: 100%
+    top: 40%
+    z-index: 20000
+
+    color: #ddd
+    font-size: 14px
+    white-space: nowrap
+    text-align: center
+
+  .head
+    padding: 0 20px
+    top: -8px
+    left: 120px
+    z-index: 10000
+
+    background: #667
+    box-shadow: 1px 1px 2px #00000088
+    border-radius: 3px
+    color: #eee
+    font-size: 12px
+    white-space: nowrap
+    pointer-events: none
+    user-select: none
+
+.game-field
+  position: absolute
+  width: 100%
+  height: 100%
+  z-index: 0

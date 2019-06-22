@@ -1,21 +1,21 @@
 <template>
-<div class="head">タイトル: {{ title }}</div>
+  <section class="game-root floating playground">
+    <div class="head floating">Music Instrument Playground: {{ title }}</div>
+    <svg class="game-field"></svg>
+  </section>
 </template>
 
 <script>
-export default {
-  name: 'playground',
-  data () {
-    return {
-      title: 'This is Playground.vue!!'
+  export default {
+    name: 'playground',
+    data() { return {
+      // title: this.title,
+    }},
+    props: {
+      title: {
+        type: String,
+        default: 'This is Playground.vue!!',
+      }
     }
   }
-}
 </script>
-
-<style lang="stylus">
-  .head
-    font-size: 12px
-    pointer-events: none
-    user-select: none
-</style>

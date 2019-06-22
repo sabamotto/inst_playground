@@ -17,8 +17,16 @@ import "phoenix_html"
 // import socket from "./socket"
 
 import Vue from 'vue'
-import App from './Playground.vue'
+import ConfirmationModal from './modals/ConfirmationModal.vue'
+Vue.component('confirm', ConfirmationModal)
 
-if (document.getElementById('playground')) {
-  new Vue(App).$mount('#playground')
+import Playground from './Playground.vue'
+
+let app = null
+
+let container = document.getElementById('PlaygroundRoot')
+if (container) {
+  const title = container.getAttribute('title')
+  app = new Vue(Playground).$mount(container)
+  app.title = title
 }

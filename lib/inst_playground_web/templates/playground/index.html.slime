@@ -1,4 +1,2 @@
-section.game-root
-  h1 Playground Global Room
-
-  .game-area#playground Loading now..
+section.game-root.floating#PlaygroundRoot title="GLOBAL ROOM"
+  .loading now loading...
