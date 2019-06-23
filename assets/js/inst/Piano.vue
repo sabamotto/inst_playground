@@ -13,6 +13,7 @@
 
     <g v-for="(white, index) in whites" :transform="whitePos(index)"
         @mousedown.prevent="play(white.note)" @mouseenter="play(white.note, true)"
+        @touchstart.prevent="play(white.note)" @touchenter="play(white.note, true)"
         :class="{
           'white-key': true,
           'selected': performing && selectedNote === white.note,
@@ -23,6 +24,7 @@
 
     <g v-for="(black, index) in blacks" :transform="blackPos(black.pos)"
         @mousedown.prevent="play(black.note)" @mouseenter="play(black.note, true)"
+        @touchstart.prevent="play(black.note)" @touchenter="play(black.note, true)"
         :class="{
           'black-key': true,
           'selected': performing && selectedNote === black.note,
