@@ -21,7 +21,8 @@ import socket from "./socket"
 let channel = socket.channel('playground:global', {})
 
 import openWebPiano from "./inst/OpenWebPiano"
-let audioContext = new AudioContext()
+const gAudioContext = window.AudioContext || window.webkitAudioContext
+let audioContext = new gAudioContext()
 openWebPiano.init(audioContext)
 
 import Piano from './inst/Piano.vue'
