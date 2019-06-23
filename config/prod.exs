@@ -12,6 +12,7 @@ use Mix.Config
 config :inst_playground, InstPlaygroundWeb.Endpoint,
   # url: [host: "example.com", port: 80],
   http: [port: 4000],
+  check_origin: ["//inst-playground.gigalixirapp.com"],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
 # Do not print debug messages in production
