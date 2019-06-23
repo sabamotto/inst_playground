@@ -6,7 +6,7 @@
         <rect width=240 height=32 fill="#ccc"></rect>
         <text x=120 y=20 width=240 height=32 text-anchor="middle" fill="black">Show confirmation modal</text>
       </g>
-      <Piano x=100 y=100></Piano>
+      <Piano x=100 y=100 @play-note="playPianoNote" :last-note="lastNote"></Piano>
     </svg>
 
     <confirm v-if="showConfirm" @cancel="showConfirm=false" @ok="showConfirm=false">
@@ -17,18 +17,41 @@
 </template>
 
 <script>
-import Piano from './inst/Piano.vue'
+import socket from "./socket"
+let channel = socket.channel('playground:global', {})
 
+import openWebPiano from "./inst/OpenWebPiano"
+let audioContext = new AudioContext()
+openWebPiano.init(audioContext)
+
+import Piano from './inst/Piano.vue'
 export default {
   name: 'playground',
   data() { return {
     showConfirm: false,
+    lastNote: null,
   }},
   props: {
     title: 'This is Playground.vue!!',
   },
+  methods: {
+    playPianoNote(note) {
+      channel.push('note', {scale: note})
+      // openWebPiano.noteOn(note, 100)
+    },
+  },
   components: {
     Piano
+  },
+  mounted() {
+    channel.on('note', payload => {
+      if (!payload.scale) return
+      this.lastNote = payload.scale - 48
+      openWebPiano.noteOn(payload.scale, 80)
+    })
+    channel.join()
+      .receive('ok', resp => console.log('Joined global channel'))
+      .receive('error', resp => console.log('Failed to join channel'))
   }
 }
 </script>

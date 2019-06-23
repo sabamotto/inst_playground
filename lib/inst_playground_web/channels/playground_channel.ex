@@ -1,7 +1,7 @@
 defmodule InstPlaygroundWeb.PlaygroundChannel do
   use InstPlaygroundWeb, :channel
 
-  def join("playground:lobby", payload, socket) do
+  def join("playground:global", payload, socket) do
     if authorized?(payload) do
       {:ok, socket}
     else
@@ -16,9 +16,9 @@ defmodule InstPlaygroundWeb.PlaygroundChannel do
   end
 
   # It is also common to receive messages from the client and
-  # broadcast to everyone in the current topic (playground:lobby).
-  def handle_in("shout", payload, socket) do
-    broadcast socket, "shout", payload
+  # broadcast to everyone in the current topic (playground:global).
+  def handle_in("note", payload, socket) do
+    broadcast socket, "note", payload
     {:noreply, socket}
   end
 
