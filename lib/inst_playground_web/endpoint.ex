@@ -13,7 +13,7 @@ defmodule InstPlaygroundWeb.Endpoint do
     at: "/",
     from: :inst_playground,
     gzip: false,
-    only: ~w(css fonts images js favicon.ico robots.txt)
+    only: ~w(css fonts images js audio favicon.ico robots.txt)
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
