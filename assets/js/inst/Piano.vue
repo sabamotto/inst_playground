@@ -1,5 +1,5 @@
 <template>
-  <g class="inst-piano" @mousedown="performing=true" :transform="pianoPos()">
+  <g class="inst-piano" :transform="position.getTransform()">
     <defs>
       <linearGradient id="pianoWhiteKeyBg" x1="0.410156" y1="0.417969" x2="0.320313" y2="0.144531">
       <stop stop-color="#fff" offset="0"/>
@@ -11,50 +11,91 @@
       </linearGradient>
     </defs>
 
-    <g v-for="(white, index) in whites" :transform="whitePos(index)"
-        @mousedown.prevent="play(white.note)" @mouseenter="play(white.note, true)"
-        @touchstart.prevent="play(white.note)" @touchenter="play(white.note, true)"
-        :class="{
-          'white-key': true,
-          'selected': performing && selectedNote === white.note,
-          'last': lastNote === white.note
-        }">
-      <rect class="piano-key-bg" height="100" width="20" x="-0.333333"/>
+    <g class="piano-mover" @mousedown="beginMoving">
+      <rect x="0" y="0" width="560" height="20" fill="#444"/>
+      <line x1="4" y1="5" x2="556" y2="5" stroke="#777" stroke-width="1"/>
+      <line x1="4" y1="10" x2="556" y2="10" stroke="#777" stroke-width="1"/>
+      <line x1="4" y1="15" x2="556" y2="15" stroke="#777" stroke-width="1"/>
     </g>
 
-    <g v-for="(black, index) in blacks" :transform="blackPos(black.pos)"
-        @mousedown.prevent="play(black.note)" @mouseenter="play(black.note, true)"
-        @touchstart.prevent="play(black.note)" @touchenter="play(black.note, true)"
-        :class="{
-          'black-key': true,
-          'selected': performing && selectedNote === black.note,
-          'last': lastNote === black.note
-        }">
-      <rect class="piano-key-bg" fill="#000" stroke="#000" width="12" height="60"/>
-      <rect fill="#666" stroke-width="0" x="11" y="0.333334" width="1" height="59" stroke="#000"/>
-      <rect fill="url(#pianoBlackKeyGloss)" stroke-width="0" x="0.833333" y="56" width="10.5" height="3.666667" stroke="#000"/>
+    <g class="piano-keyboard" @mousedown.prevent="performing=true" transform="translate(0,20)">
+      <g v-for="(white, index) in whites" :transform="whitePos(index)"
+          @mousedown.prevent="play(white.note)" @mouseenter="play(white.note, true)"
+          @touchstart.prevent="play(white.note)" @touchenter="play(white.note, true)"
+          :class="{
+            'white-key': true,
+            'selected': performing && selectedNote === white.note,
+            'last': lastNote === white.note
+          }">
+        <rect class="piano-key-bg" :height="height-20" width="20" x="-0.33333"/>
+      </g>
+
+      <g v-for="(black, index) in blacks" :transform="blackPos(black.pos)"
+          @mousedown.prevent="play(black.note)" @mouseenter="play(black.note, true)"
+          @touchstart.prevent="play(black.note)" @touchenter="play(black.note, true)"
+          :class="{
+            'black-key': true,
+            'selected': performing && selectedNote === black.note,
+            'last': lastNote === black.note
+          }">
+        <rect class="piano-key-bg" fill="#000" stroke="#000" width="12" height="60"/>
+        <rect fill="#666" stroke-width="0" x="11" y="0.333334" width="1" height="59" stroke="#000"/>
+        <rect fill="url(#pianoBlackKeyGloss)" stroke-width="0" x="0.833333" y="56" width="10.5" height="3.666667" stroke="#000"/>
+      </g>
     </g>
   </g>
 </template>
 
 <script>
-import Vue from "vue"
+import Vue from 'vue'
+import ScaledPosition from '../utils/scaled_position'
 
 export default {
   data() { return {
+    position: new ScaledPosition({
+      rawX: 0.5,
+      rawY: 0.8,
+      scalerX: this.parentWidth,
+      scalerY: this.parentHeight,
+      offsetX: -this.width / 2,
+      offsetY: -this.height / 2,
+      limit: {
+        left: this.width / 2,
+        top: this.height / 2,
+        right: this.parentWidth - this.width / 2,
+        bottom: this.parentHeight - this.height / 2,
+      },
+    }),
     whites: [],
     blacks: [],
     selectedNote: -1,
     performing: false,
+    startLoc: null,
+    startCursor: null,
   } },
   props: {
-    x: 0, y: 0,
-    lastNote: 0,
+    width: { default: 560 },
+    height: { default: 120 },
+    parentWidth: { default: 800 },
+    parentHeight: { default: 600 },
+    lastNote: { default: null },
   },
-  methods: {
+  watch: {
+    parentWidth(newVal, oldVal) { this.updatePosition() },
+    parentHeight(newVal, oldVal) { this.updatePosition() },
+  },
+  computed: {
     pianoPos() {
       return `translate(${this.x},${this.y})`
     },
+  },
+  methods: {
+    updatePosition() {
+      this.position.rescale(this.parentWidth, this.parentHeight)
+      this.position.limit.right = this.parentWidth - this.width / 2
+      this.position.limit.bottom = this.parentHeight - this.height / 2
+    },
+
     whitePos(index) {
       return `translate(${index * 20},0)`
     },
@@ -65,7 +106,42 @@ export default {
       if (dragging && !this.performing) return
       this.selectedNote = note
       this.$emit('play-note', note+48)
-    }
+    },
+    playFromKey(e) {
+      if (e.repeat) return
+      const baseOctave = 12
+      const note = {
+        0x41: baseOctave+0,
+        0x53: baseOctave+2,
+        0x44: baseOctave+4,
+        0x46: baseOctave+5,
+        0x47: baseOctave+7,
+        0x48: baseOctave+9,
+        0x4A: baseOctave+11,
+        0x4B: baseOctave+12,
+        0x4C: baseOctave+14,
+      }[e.keyCode]
+      if (note) {
+        e.preventDefault()
+        this.play(note)
+      }
+    },
+
+    beginMoving(e) {
+      this.startCursor = { x: e.pageX, y: e.pageY }
+      this.startLoc = { x: this.position.scaledX, y: this.position.scaledY }
+      document.addEventListener('mousemove', this.moving, false)
+      document.addEventListener('mouseup', this.endMoving, false)
+    },
+    moving(e) {
+      this.position.scaledX = this.startLoc.x + (e.pageX - this.startCursor.x)
+      this.position.scaledY = this.startLoc.y + (e.pageY - this.startCursor.y)
+    },
+    endMoving(e) {
+      this.startCursor = this.startLoc = null
+      document.removeEventListener('mousemove', this.moving, false)
+      document.removeEventListener('mouseup', this.endMoving, false)
+    },
   },
   mounted() {
     function toNote(i) {
@@ -101,24 +177,24 @@ export default {
     }
 
     window.addEventListener('mouseup', e => this.performing=false, false)
+    window.addEventListener('keydown', this.playFromKey, false)
   }
 }
 </script>
 
-<style lang="stylus">
-g.inst-piano
-  // rect.piano-key-bg
-  //   transition: all .1s ease-out
+<style scoped lang="stylus">
+g.piano-mover
+  cursor: move
 
-  g.white-key rect.piano-key-bg
-    fill: url(#pianoWhiteKeyBg)
-    stroke: #000
+g.white-key rect.piano-key-bg
+  fill: url(#pianoWhiteKeyBg)
+  stroke: #000
 
-  g.white-key.last rect.piano-key-bg
-    fill: #fcc
-  g.black-key.last rect.piano-key-bg
-    fill: #400
+g.white-key.last rect.piano-key-bg
+  fill: #fcc
+g.black-key.last rect.piano-key-bg
+  fill: #600
 
-  g.selected rect.piano-key-bg
-    fill: red !important
+g.selected rect.piano-key-bg
+  fill: red !important
 </style>
