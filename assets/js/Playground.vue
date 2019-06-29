@@ -2,7 +2,7 @@
   <section class="game-root floating">
     <div class="head floating">Music Instrument Playground: {{ title }}</div>
     <svg class="playground">
-      <g @click="showConfirm=true" transform="translate(20,0)" style="cursor:pointer">
+      <g @click="showConfirm=true" transform="translate(16,20)" style="cursor:pointer">
         <rect width=240 height=32 fill="#ccc"></rect>
         <text x=120 y=20 width=240 height=32 text-anchor="middle" fill="black">Show confirmation modal</text>
       </g>

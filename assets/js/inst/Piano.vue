@@ -2,20 +2,25 @@
   <g class="inst-piano" :transform="position.getTransform()">
     <defs>
       <linearGradient id="pianoWhiteKeyBg" x1="0.410156" y1="0.417969" x2="0.320313" y2="0.144531">
-      <stop stop-color="#fff" offset="0"/>
-      <stop stop-color="#b7b7b7" stop-opacity="0.996094" offset="1"/>
+        <stop stop-color="#fff" offset="0"/>
+        <stop stop-color="#b7b7b7" stop-opacity="0.996094" offset="1"/>
       </linearGradient>
       <linearGradient id="pianoBlackKeyGloss" x1="0.558594" y1="0.785156" x2="0.144531" y2="0">
-      <stop stop-color="#666" offset="0"/>
-      <stop stop-color="#fff" stop-opacity="0.996094" offset="1"/>
+        <stop stop-color="#666" offset="0"/>
+        <stop stop-color="#fff" stop-opacity="0.996094" offset="1"/>
+      </linearGradient>
+      <linearGradient id="pianoMoverBg" x1="0" y1="0" x2="0" y2="1">
+        <stop stop-color="#777" offset="0"/>
+        <stop stop-color="#444" offset="0.1"/>
+        <stop stop-color="#333" offset="1"/>
       </linearGradient>
     </defs>
 
     <g class="piano-mover" @mousedown="beginMoving">
-      <rect x="0" y="0" width="560" height="20" fill="#444"/>
-      <line x1="4" y1="5" x2="556" y2="5" stroke="#777" stroke-width="1"/>
-      <line x1="4" y1="10" x2="556" y2="10" stroke="#777" stroke-width="1"/>
-      <line x1="4" y1="15" x2="556" y2="15" stroke="#777" stroke-width="1"/>
+      <rect x="0" y="0" width="560" height="20" fill="url(#pianoMoverBg)"/>
+      <line x1="4" y1="5" x2="556" y2="5" stroke="#777777cc" stroke-width="1"/>
+      <line x1="4" y1="9" x2="556" y2="9" stroke="#777777cc" stroke-width="1"/>
+      <line x1="4" y1="13" x2="556" y2="13" stroke="#777777cc" stroke-width="1"/>
     </g>
 
     <g class="piano-keyboard" @mousedown.prevent="performing=true" transform="translate(0,20)">
@@ -28,6 +33,8 @@
             'last': lastNote === white.note
           }">
         <rect class="piano-key-bg" :height="height-20" width="20" x="-0.33333"/>
+
+        <text v-if="index>=7 && index<=16" x="10" :y="height-24" fill="#666" text-anchor="middle">{{ 'ASDFGHJKL'[index-7] }}</text>
       </g>
 
       <g v-for="(black, index) in blacks" :transform="blackPos(black.pos)"
@@ -38,9 +45,9 @@
             'selected': performing && selectedNote === black.note,
             'last': lastNote === black.note
           }">
-        <rect class="piano-key-bg" fill="#000" stroke="#000" width="12" height="60"/>
-        <rect fill="#666" stroke-width="0" x="11" y="0.333334" width="1" height="59" stroke="#000"/>
-        <rect fill="url(#pianoBlackKeyGloss)" stroke-width="0" x="0.833333" y="56" width="10.5" height="3.666667" stroke="#000"/>
+        <rect class="piano-key-bg" fill="#111" stroke="#111" width="12" height="60"/>
+        <rect fill="#666" stroke-width="0" x="11" y="0.333334" width="1" height="59" stroke="#111"/>
+        <rect fill="url(#pianoBlackKeyGloss)" stroke-width="0" x="0.833333" y="56" width="10.5" height="3.666667" stroke="#111"/>
       </g>
     </g>
   </g>
