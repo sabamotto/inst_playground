@@ -15,7 +15,7 @@ html lang="en"
         nav role="navigation"
           ul.nav.nav-pills.pull-right
             li
-              a href="http://hexdocs.pm/phoenix/overview.html" Get Started
+              a href="https://github.com/sabamotto/inst_playground.git" GitHub
         a.phx-logo href="http://phoenixframework.org/"
           img alt="Phoenix Framework Logo" src=Routes.static_path(@conn, "/images/phoenix.png")
 
