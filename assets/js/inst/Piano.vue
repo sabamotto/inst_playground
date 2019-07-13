@@ -54,7 +54,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import ScaledPosition from '../utils/scaled_position'
 
 export default {
