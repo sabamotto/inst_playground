@@ -7,7 +7,7 @@
         <text x=120 y=20 width=240 height=32 text-anchor="middle" fill="black">Show confirmation modal</text>
       </g>
 
-      <Player v-for="player in players" :parent-width="width" :parent-height="height"></Player>
+      <Player v-for="(player, index) in players" :key="index" :parent-width="width" :parent-height="height"></Player>
 
       <Piano x=20 y=60 :parent-width="width" :parent-height="height" @play-note="playPianoNote" :last-note="lastNote"></Piano>
     </svg>
