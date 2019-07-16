@@ -6,6 +6,9 @@
         <rect width=240 height=32 fill="#ccc"></rect>
         <text x=120 y=20 width=240 height=32 text-anchor="middle" fill="black">Show confirmation modal</text>
       </g>
+
+      <Player v-for="player in players" :parent-width="width" :parent-height="height"></Player>
+
       <Piano x=20 y=60 :parent-width="width" :parent-height="height" @play-note="playPianoNote" :last-note="lastNote"></Piano>
     </svg>
 
@@ -26,6 +29,7 @@ let audioContext = new gAudioContext()
 openWebPiano.init(audioContext)
 
 import Piano from './inst/Piano.vue'
+import Player from './Player.vue'
 export default {
   name: 'playground',
   data() { return {
@@ -35,6 +39,7 @@ export default {
     lastNote: null,
     channel: null,
     connected: false,
+    players: [{}],
   }},
   props: {
     title: 'This is Playground.vue!!',
@@ -50,7 +55,7 @@ export default {
     },
   },
   components: {
-    Piano
+    Piano, Player
   },
   mounted() {
     this.updateSize()
@@ -68,14 +73,13 @@ export default {
 }
 </script>
 
-<style lang="stylus">
-svg.playground
-  circle
-    transition: all .25s ease-out
-    fill: #a66
-    stroke: #333
-    stroke-width: 1px
-    &:hover
-      fill: #e99
-      stroke-width: 2px
+<style lang="stylus" scoped>
+circle
+  transition: all .25s ease-out
+  fill: #a66
+  stroke: #333
+  stroke-width: 1px
+  &:hover
+    fill: #e99
+    stroke-width: 2px
 </style>
