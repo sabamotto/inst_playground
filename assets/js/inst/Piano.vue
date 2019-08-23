@@ -117,7 +117,8 @@ export default {
       if (e.repeat) return
       const baseOctave = 12
       const note = {
-        0x41: baseOctave+0,
+        // white keys
+        0x41: baseOctave+0,   // A
         0x53: baseOctave+2,
         0x44: baseOctave+4,
         0x46: baseOctave+5,
@@ -125,7 +126,14 @@ export default {
         0x48: baseOctave+9,
         0x4A: baseOctave+11,
         0x4B: baseOctave+12,
-        0x4C: baseOctave+14,
+        0x4C: baseOctave+14,  // L
+        // black keys
+        0x57: baseOctave+1,   // W
+        0x45: baseOctave+3,
+        0x54: baseOctave+6,
+        0x59: baseOctave+8,
+        0x55: baseOctave+10,
+        0x4F: baseOctave+13,  // O
       }[e.keyCode]
       if (note) {
         e.preventDefault()
