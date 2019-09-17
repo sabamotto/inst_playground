@@ -1,5 +1,11 @@
 # InstPlayground
 
+["Music-Instrument Playground"](https://inst-playground.gigalixirapp.com)
+
+Share your performance with everyone.
+
+
+## Setup app
 To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`
@@ -10,8 +16,7 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
 
-## Learn more
-
+## Learn more for Phoenix
   * Official website: http://www.phoenixframework.org/
   * Guides: https://hexdocs.pm/phoenix/overview.html
   * Docs: https://hexdocs.pm/phoenix
